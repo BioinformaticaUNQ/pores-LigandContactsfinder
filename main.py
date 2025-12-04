@@ -1,8 +1,20 @@
 import sys
+import os
 from procesar_estructura import procesar_estructura
 
 if len(sys.argv) > 1:
-    for file in sys.argv[1:]:
+    path = sys.argv[1]
+
+    if not os.path.exists(path):
+        print("no es un path valido, ingrese un archivo o directorio")
+        files = []
+    elif os.path.isdir(path):
+        files = [os.path.join(path, f) for f in os.listdir(path)]
+        #mejora: filtrar solo archivos con extension .pdb o .cif
+    else:
+        files = [path]
+    
+    for file in files:
       try: # sustituir el cuerpo por la funcion "residuos_de_la_proteina".
         structure = procesar_estructura(file)
         print(f"Parseado correctamente, structure : {structure}")
