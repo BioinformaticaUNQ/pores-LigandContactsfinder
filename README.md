@@ -10,3 +10,8 @@ pip install biopython
 ```
 python.exe main.py .\****.cif .\****.pdb
 ```
+
+# Alternativamente ingrese la proteina para buscarla automaticamente
+```
+python.exe main.py 3FAT
+```
