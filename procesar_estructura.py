@@ -1,4 +1,11 @@
-from Bio.PDB import PDBParser, MMCIFParser
+from Bio.PDB import PDBParser, MMCIFParser, PDBList
+import os
+
+def fetch_protein_structure(file_name):
+  pdbl = PDBList()
+  pdbl.retrieve_pdb_file(file_name, file_format='pdb', pdir='.')
+  os.rename(f"pdb{file_name}.ent", f"{file_name}.pdb")
+  return f"{file_name}.pdb"
 
 def load_structure_file(file):
   parser = None

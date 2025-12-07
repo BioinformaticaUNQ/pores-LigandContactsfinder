@@ -1,13 +1,18 @@
 import sys
 import os
-from procesar_estructura import procesar_estructura
+from procesar_estructura import procesar_estructura, fetch_protein_structure
 
 if len(sys.argv) > 1:
     path = sys.argv[1]
 
     if not os.path.exists(path):
-        print("no es un path valido, ingrese un archivo o directorio")
-        files = []
+        if path.isalnum()and len(path) == 4:
+            print(f"Descargando estructura PDB para el ID: {path}")
+            file = fetch_protein_structure(path)
+            files = [file]
+        else:
+            print("no es un path valido, ingrese un archivo o directorio")
+            files = []
     elif os.path.isdir(path):
         files = [os.path.join(path, f) for f in os.listdir(path)]
         #mejora: filtrar solo archivos con extension .pdb o .cif
