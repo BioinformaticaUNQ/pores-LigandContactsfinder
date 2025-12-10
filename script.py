@@ -21,6 +21,9 @@ def load_structure_file(file):
   structure = parser.get_structure("prot",file)
   return structure
 
+def save_structure_file(structure, json_file, mode='a'):
+  with open(json_file, mode) as f:
+      f.writelines(structure)
 #-------------AUX---------------------
 
 def fetch_protein_structure(file_name):
@@ -137,12 +140,25 @@ if __name__ == "__main__":
         else:
             files = [path]
         
+        content = []
         for file in files:
             try:
                 # Llamar a la función principal para procesar y obtener el resultado JSON
                 result = residuos_de_la_proteina(file)
-                print(result)
+                result = str(result)
+                if len(result) > 2:
+                    print(f"{result}" )
+                    content.append(result)
             except FileNotFoundError as e:
                 print(f"No se encuentra el archivo {file}: {e}")
             except Exception as e:
                 print(f"Error al parsear el archivo {file}: {e}")
+
+        if len(content)>0:
+            save_structure_file('{', 'output.json', 'w')
+            for idx, cont in enumerate(content):
+                save_structure_file(cont[1:-2], "output.json")
+                if idx < len(content) - 1:
+                    save_structure_file(',', 'output.json')
+                else:
+                    save_structure_file('}', 'output.json')
