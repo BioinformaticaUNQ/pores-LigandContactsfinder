@@ -23,10 +23,9 @@ python script.py [opciones] <archivo_o_id>
 
 ### Opciones y Parámetros
 
-- `<archivo_o_id>`: Ruta a un archivo (.pdb/.cif), directorio con archivos, o ID de PDB (4 letras, e.g., 3FAT). Si es un directorio, procesa todos los archivos .pdb/.cif en él.
+- `<archivo_o_id>`: Ruta a un archivo (.pdb/.cif), directorio con archivos, o ID de PDB (4 letras, ej., 3FAT). Si es un directorio, procesa todos los archivos .pdb/.cif en él.
 - `-c`, `--cutoff`: Distancia de corte en Ångstroms para buscar contactos (por defecto: 4.0). Debe ser un número positivo.
 - `-o`, `--output`: Archivo de salida JSON (por defecto: output.json). Si no se especifica, se guarda en el directorio actual.
-- `-v`, `--verbose`: Modo verboso: Muestra más detalles durante la ejecución (e.g., progreso de descarga).
 - `-h`, `--help`: Muestra este mensaje de ayuda y sale.
 
 ### Ejemplos de Corrida
@@ -53,9 +52,9 @@ python script.py [opciones] <archivo_o_id>
 - Descarga automáticamente desde PDB si no existe localmente.
 
 5. **Modo verboso con salida personalizada:**
-   python script.py -v -o resultados.json 1ABC
+   python script.py -o resultados 1ABC
 
-- Muestra progreso y guarda en resultados.json.
+- Guarda en resultados.json.
 
 ### Formato de Salida JSON
 

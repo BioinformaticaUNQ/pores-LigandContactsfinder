@@ -7,6 +7,9 @@ import sys
 # Distancia de busqueda
 CUTOFF_DISTANCE = 4
 
+
+archivo_salida = "output"
+
 #----------LOAD FILE-----------------------
 
 def load_structure_file(file):
@@ -17,7 +20,7 @@ def load_structure_file(file):
     parser = PDBParser(QUIET=True)
   else:
     raise Exception("Formato de archivo no soportado. Adjuntar .cif/.pdb")
-  print(f"file : {file}")
+  print(f"Archivo : {file}")
   structure = parser.get_structure("prot",file)
   return structure
 
@@ -121,12 +124,37 @@ def residuos_de_la_proteina(file):
   result = format_output(contacts,file)
   return result
 
-
-
 # ----------- MAIN ----------------------
 if __name__ == "__main__":
+    if '-c' in sys.argv or '--cutoff' in sys.argv:
+        indice_cutoff = 1
+        if '-c' in sys.argv:
+            indice_cutoff += sys.argv.index('-c')
+        else:
+            indice_cutoff += sys.argv.index('--cutoff')
+
+        CUTOFF_DISTANCE = int(sys.argv[indice_cutoff])
+        print(f"Distancia de busqueda establecida en: {CUTOFF_DISTANCE} Angstroms") 
+    #    -v sustituir print por logging
+
+    if '-o' in sys.argv or '--output' in sys.argv:
+        indice_archivo_salida = 1
+        if '-o' in sys.argv:
+            indice_archivo_salida += sys.argv.index('-o')
+        else:
+            indice_archivo_salida += sys.argv.index('--output')
+      
+        archivo_salida = str(sys.argv[indice_archivo_salida])
+        print(f"Archivo de salida establecido en: {archivo_salida}")
+
+    if '-h' in sys.argv or '--help' in sys.argv:
+        print("Uso: python script.py [path|PDB_ID]")
+        print("path: ruta a un archivo .pdb/.cif o a un directorio que contenga dichos archivos.")
+        print("PDB_ID: ID de 4 caracteres para descargar la estructura desde RCSB PDB.")
+        sys.exit(0)
+
     if len(sys.argv) > 1:
-        path = sys.argv[1]
+        path = sys.argv[-1]
         if not os.path.exists(path):
             if path.isalnum() and len(path) == 4:
                 print(f"Descargando estructura PDB para el ID: {path}")
@@ -141,24 +169,30 @@ if __name__ == "__main__":
             files = [path]
         
         content = []
+        archivo_salida = archivo_salida + ".json"
+        print(f"archivo_salida: {archivo_salida}")
+
         for file in files:
             try:
                 # Llamar a la función principal para procesar y obtener el resultado JSON
                 result = residuos_de_la_proteina(file)
                 result = str(result)
-                if len(result) > 2:
+                if len(result) > 2: #tiene algo mas que {}
                     print(f"{result}" )
                     content.append(result)
+                else:
+                    print(f"No se encontraron ligandos en el archivo {file}.")
             except FileNotFoundError as e:
                 print(f"No se encuentra el archivo {file}: {e}")
             except Exception as e:
                 print(f"Error al parsear el archivo {file}: {e}")
 
         if len(content)>0:
-            save_structure_file('{', 'output.json', 'w')
+            print( f"Guardando resultados en {archivo_salida}" )
+            save_structure_file('{', archivo_salida, 'w')
             for idx, cont in enumerate(content):
-                save_structure_file(cont[1:-2], "output.json")
+                save_structure_file(cont[1:-2], archivo_salida)
                 if idx < len(content) - 1:
-                    save_structure_file(',', 'output.json')
+                    save_structure_file(',', archivo_salida)
                 else:
-                    save_structure_file('}', 'output.json')
+                    save_structure_file('}', archivo_salida)
