@@ -16,6 +16,7 @@ pip install biopython
 ## Uso
 
 Ejecuta el script desde la línea de comandos. Soporta archivos locales (.pdb/.cif), directorios con múltiples archivos, o IDs de PDB para descarga automática.
+(Los archivos con el mismo nombre se sobreescriben)
 
 ### Sintaxis General
 
